@@ -101,7 +101,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        File pasta = new File("testes-files");
+        File pasta = new File("teste-files");
         ArrayList<String> exemplos = leExemplos(pasta);
         System.out.println("Ficheiros lidos: " + exemplos.size());
 
