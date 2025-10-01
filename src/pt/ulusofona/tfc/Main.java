@@ -13,7 +13,7 @@ public class Main {
     public static ArrayList<String> leExemplos(File pasta) {
         ArrayList<String> conteudoFicheiros = new ArrayList<>();
 
-        // verificar se a pasta existe e é diretório
+        // verificar se a pasta existe ou é diretório
         if (pasta == null || !pasta.exists() || !pasta.isDirectory()) {
             System.out.println("A pasta " + pasta + " não existe");
             return conteudoFicheiros;
