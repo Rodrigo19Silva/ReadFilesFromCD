@@ -51,8 +51,8 @@ public class Main {
     }
 
     public static String enviarPedido(ArrayList<String> partes) throws Exception {
-        String apiKey = System.getenv("OPENAI_API_KEY");
-        if (apiKey == null || apiKey.isBlank()) {
+        String apiKey = "";
+        if (apiKey == null) {
             throw new IllegalStateException("Defina a variável de ambiente OPENAI_API_KEY.");
         }
 
