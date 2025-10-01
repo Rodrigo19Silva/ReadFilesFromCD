@@ -4,15 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ddb0ecde-14e5-49c4-8a09-90fdda6af5b3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/leExemplos.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/LeExemplosTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+    <list default="true" id="ddb0ecde-14e5-49c4-8a09-90fdda6af5b3" name="Changes" comment="coloquei a função que o gpt deu para uma função chamada enviarPedido onde recebe um array list de strings e devolve uma string &#10;&#10;ajustei uns ifs onde verifiquei se é mesmo um diretorio e se é um ficheiro txt">
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,11 +28,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="33KOkWcky058cdtl8dTCDlakfWK" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -47,12 +45,28 @@
     "Repository.Attach.Sources": "false",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master"
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/ADMIN/IdeaProjects/ReadFilesFromCD/src/testes",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\ADMIN\IdeaProjects\ReadFilesFromCD\src\testes" />
+    </key>
+  </component>
   <component name="RunManager" selected="JUnit.LeExemplosTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
+      <option name="MAIN_CLASS_NAME" value="pt.ulusofona.tfc.Main" />
       <module name="leExemplos" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -60,8 +74,8 @@
     </configuration>
     <configuration name="LeExemplosTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="leExemplos" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="LeExemplosTest" />
+      <option name="PACKAGE_NAME" value="pt.ulusofona.tfc" />
+      <option name="MAIN_CLASS_NAME" value="pt.ulusofona.tfc.LeExemplosTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -69,8 +83,8 @@
     </configuration>
     <configuration name="LeExemplosTest.leConteudoDeFicheirosDaPasta" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="leExemplos" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="LeExemplosTest" />
+      <option name="PACKAGE_NAME" value="pt.ulusofona.tfc" />
+      <option name="MAIN_CLASS_NAME" value="pt.ulusofona.tfc.LeExemplosTest" />
       <option name="METHOD_NAME" value="leConteudoDeFicheirosDaPasta(java.nio.file.Path)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -85,6 +99,14 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -93,7 +115,24 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1759062442809</updated>
+      <workItem from="1759257058535" duration="5073000" />
     </task>
+    <task id="LOCAL-00001" summary="coloquei a função que o gpt deu para uma função chamada enviarPedido onde recebe um array list de strings e devolve uma string &#10;&#10;ajustei uns ifs onde verifiquei se é mesmo um diretorio e se é um ficheiro txt">
+      <option name="closed" value="true" />
+      <created>1759318203249</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1759318203249</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="coloquei a função que o gpt deu para uma função chamada enviarPedido onde recebe um array list de strings e devolve uma string &#10;&#10;ajustei uns ifs onde verifiquei se é mesmo um diretorio e se é um ficheiro txt" />
+    <option name="LAST_COMMIT_MESSAGE" value="coloquei a função que o gpt deu para uma função chamada enviarPedido onde recebe um array list de strings e devolve uma string &#10;&#10;ajustei uns ifs onde verifiquei se é mesmo um diretorio e se é um ficheiro txt" />
   </component>
 </project>
