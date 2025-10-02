@@ -1,5 +1,9 @@
 package pt.ulusofona.tfc;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -100,13 +104,94 @@ public class Main {
         return response.body();
     }
 
+    static String[] obterModelos() {
+        return new String[]{"GPT"};
+    }
+
+    static void processarPedido(String folder, String modelo, int nrVersoes) {
+        ArrayList exemplos = leExemplos(new File(folder));
+
+        try {
+            String jsonResposta = enviarPedido(exemplos);
+
+            System.out.println("Resposta do servidor:\n" + jsonResposta);
+
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static String mostrarGUI() {
+        JFrame window = new JFrame();
+
+        // TODO RODRIGO ajustar tamanho
+        window.setSize(200, 300);
+
+        JPanel pane = new JPanel();
+
+        window.add(pane);
+
+        pane.setLayout(new GridLayout(4,2));
+
+        // Input da Pasta
+        pane.add(new JLabel("Folder"));
+        JTextField folderTextField = new JTextField("");
+        folderTextField.setSize(20, 20);
+        folderTextField.setColumns(15);
+        // no futuro vai ser 1 "browse folder"
+        folderTextField.setText("C:\\Users\\ADMIN\\IdeaProjects\\ReadFilesFromCD\\teste-files");
+        pane.add(folderTextField);
+
+        // Input do Modelo
+        pane.add(new JLabel("Model"));
+        String[] modelos = obterModelos();
+        JComboBox<String> dropdown = new JComboBox<>(modelos);
+        pane.add(dropdown);
+
+        // Input do nr de versoes
+        pane.add(new JLabel("ola"));
+        pane.add(new JLabel("meter aqui um text field -- ver o exemplo da pasta")); // TODO RODRIGO
+
+        JButton enviarButton = new JButton("Enviar");
+        enviarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //JOptionPane.showMessageDialog(window, "Você clicou no botão!");
+
+                String pasta = folderTextField.getText();
+
+                // TODO: Rodrigo
+                // - ir buscar o nome do modelo
+                // - ir buscar à text field --- usar parseInt()
+                processarPedido(pasta, "modelo aqui", -999);
+
+            }
+        });
+
+        pane.add(enviarButton);
+
+        window.setVisible(true);
+
+        return null;
+    }
+
+
     public static void main(String[] args) throws Exception {
+
+        mostrarGUI();
+
+        //workflowDemo();
+
+    }
+
+    public static void workflowDemo() throws Exception {
         File pasta = new File("teste-files");
-        ArrayList<String> exemplos = leExemplos(pasta);
+
+        ArrayList exemplos = leExemplos(pasta);
+
         System.out.println("Ficheiros lidos: " + exemplos.size());
 
         String jsonResposta = enviarPedido(exemplos);
-
 
         System.out.println("Resposta do servidor:\n" + jsonResposta);
     }
