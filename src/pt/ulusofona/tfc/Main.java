@@ -1,7 +1,4 @@
 package pt.ulusofona.tfc;
-import com.formdev.flatlaf.FlatLightLaf;
-
-
 
 import pt.ulusofona.tfc.filters.NumericFilter;
 
@@ -134,7 +131,7 @@ public class Main {
         JFrame window = new JFrame();
 
 
-        window.setSize(1400, 1000);
+        window.setSize(1600, 1000);
         window.setLocationRelativeTo(null);
 
         JPanel pane = new JPanel();
@@ -195,15 +192,12 @@ public class Main {
     }
 
 
+    public static void main(String[] args) throws Exception {
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(new FlatLightLaf());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mostrarGUI();
 
-        SwingUtilities.invokeLater(Main::mostrarGUI);
+        //workflowDemo();
+
     }
 
     public static void workflowDemo() throws Exception {
