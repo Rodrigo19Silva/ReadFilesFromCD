@@ -162,11 +162,12 @@ public class Main {
         numberBox.setEditable(true);
         JTextField editor = (JTextField) numberBox.getEditor().getEditorComponent();
         ((AbstractDocument) editor.getDocument()).setDocumentFilter(new NumericFilter());
+
         pane.add(numberBox);
 
 
 
-        JButton enviarButton = new JButton("Enviar");
+        JButton enviarButton = new JButton("Submeter");
         enviarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -176,7 +177,30 @@ public class Main {
 
 
                 // - ir buscar o nr versões
-                int nrVersoes = (int) numberBox.getSelectedItem();
+                Object valorSelecionado = numberBox.getSelectedItem();
+                int nrVersoes;
+
+                if (valorSelecionado instanceof Integer) {
+                    nrVersoes = (Integer) valorSelecionado;
+                } else {
+                    String txt = String.valueOf(valorSelecionado);
+                    if (txt.isEmpty()) {
+                        JOptionPane.showMessageDialog(window,
+                                "Indica o número de versões (>= 1).",
+                                "Valor em falta",
+                                JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    nrVersoes = Integer.parseInt(txt);
+                    if (nrVersoes < 1) {
+                        JOptionPane.showMessageDialog(window,
+                                "O número de versões tem de ser >= 1.",
+                                "Valor inválido",
+                                JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                }
+
                 // - ir buscar o nome do modelo
                 String modelo = (String) dropdown.getSelectedItem();
                 processarPedido(pasta, modelo, nrVersoes);
