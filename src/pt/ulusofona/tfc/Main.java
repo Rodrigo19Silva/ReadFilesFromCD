@@ -1,10 +1,19 @@
 package pt.ulusofona.tfc;
+import com.formdev.flatlaf.FlatLightLaf;
+
+
+
+import pt.ulusofona.tfc.filters.NumericFilter;
 
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -124,8 +133,9 @@ public class Main {
     public static String mostrarGUI() {
         JFrame window = new JFrame();
 
-        // TODO RODRIGO ajustar tamanho
-        window.setSize(200, 300);
+
+        window.setSize(1400, 1000);
+        window.setLocationRelativeTo(null);
 
         JPanel pane = new JPanel();
 
@@ -149,8 +159,15 @@ public class Main {
         pane.add(dropdown);
 
         // Input do nr de versoes
-        pane.add(new JLabel("ola"));
-        pane.add(new JLabel("meter aqui um text field -- ver o exemplo da pasta")); // TODO RODRIGO
+        pane.add(new JLabel("Versões"));
+        Integer[] options = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        JComboBox<Integer> numberBox = new JComboBox<>(options);
+        numberBox.setEditable(true);
+        JTextField editor = (JTextField) numberBox.getEditor().getEditorComponent();
+        ((AbstractDocument) editor.getDocument()).setDocumentFilter(new NumericFilter());
+        pane.add(numberBox);
+
+
 
         JButton enviarButton = new JButton("Enviar");
         enviarButton.addActionListener(new ActionListener() {
@@ -160,10 +177,12 @@ public class Main {
 
                 String pasta = folderTextField.getText();
 
-                // TODO: Rodrigo
+
+                // - ir buscar o nr versões
+                int nrVersoes = (int) numberBox.getSelectedItem();
                 // - ir buscar o nome do modelo
-                // - ir buscar à text field --- usar parseInt()
-                processarPedido(pasta, "modelo aqui", -999);
+                String modelo = (String) dropdown.getSelectedItem();
+                processarPedido(pasta, modelo, nrVersoes);
 
             }
         });
@@ -176,12 +195,15 @@ public class Main {
     }
 
 
-    public static void main(String[] args) throws Exception {
 
-        mostrarGUI();
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(new FlatLightLaf());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        //workflowDemo();
-
+        SwingUtilities.invokeLater(Main::mostrarGUI);
     }
 
     public static void workflowDemo() throws Exception {
