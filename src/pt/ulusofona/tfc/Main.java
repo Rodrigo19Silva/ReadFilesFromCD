@@ -102,16 +102,16 @@ public class Main {
     }
 
     static void processarPedido(String folder, String modelo, int nrVersoes, JTextArea infoOut) {
-        File dir = new File(folder);
-        if (!dir.exists() || !dir.isDirectory()) {
+        File pasta = new File(folder);
+        if (!pasta.exists() || !pasta.isDirectory()) {
             JOptionPane.showMessageDialog(null,
-                    "A pasta indicada não existe ou não é um diretório:\n" + dir.getAbsolutePath(),
+                    "A pasta indicada não existe ou não é um diretório:\n" + pasta.getAbsolutePath(),
                     "Pasta inválida",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        ArrayList<String> exemplos = leExemplos(dir);
+        ArrayList<String> exemplos = leExemplos(pasta);
 
         if (exemplos.isEmpty()) {
             JOptionPane.showMessageDialog(null,
@@ -124,15 +124,15 @@ public class Main {
         infoOut.append("Ficheiros lidos: " + exemplos.size() + "\n");
         infoOut.append("Modelo: " + modelo + " | Versões: " + nrVersoes + "\n");
 
-        for (int v = 1; v <= nrVersoes; v++) {
-            infoOut.append("A enviar versão " + v + "...\n");
+        for (int versao = 1; versao <= nrVersoes; versao++) {
+            infoOut.append("A enviar versão " + versao + "...\n");
             try {
                 String jsonResposta = enviarPedido(exemplos, modelo);
                 System.out.println(jsonResposta);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (Exception erro) {
+                erro.printStackTrace();
                 JOptionPane.showMessageDialog(null,
-                        "Erro na versão " + v + ":\n" + ex.getMessage(),
+                        "Erro na versão " + versao + ":\n" + erro.getMessage(),
                         "Erro",
                         JOptionPane.ERROR_MESSAGE);
                 return;
