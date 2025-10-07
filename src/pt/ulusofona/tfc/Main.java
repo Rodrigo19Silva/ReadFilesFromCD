@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 
 public class Main {
 
+    //variaveis globais
     private static JTextField pastaField;
     private static JTextArea infoTextArea;
     private static JComboBox<String> modeloComboBox;
