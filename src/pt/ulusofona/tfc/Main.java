@@ -16,29 +16,40 @@ import java.awt.event.ActionListener;
 
 public class Main {
 
+    private static JTextField pastaField;
+    private static JTextArea infoTextArea;
+    private static JComboBox<String> modeloComboBox;
+    private static JComboBox<Integer> versoesComboBox;
+
+
     public static ArrayList<String> leExemplos(File pasta) {
         ArrayList<String> conteudoFicheiros = new ArrayList<>();
 
+        // verificar se a pasta existe ou é diretório
         if (pasta == null || !pasta.exists() || !pasta.isDirectory()) {
             System.out.println("A pasta " + pasta + " não existe");
             return conteudoFicheiros;
         }
 
+        //guardar nomes dos ficheiros
         String[] objetos = pasta.list();
         int i = 0;
 
         while (objetos != null && i < objetos.length) {
             File ficheiro = new File(pasta, objetos[i]);
 
+            //ficheiros apenas se forem txt
             if (ficheiro.isFile() && ficheiro.getName().toLowerCase().endsWith(".txt")) {
                 try (BufferedReader br = new BufferedReader(new FileReader(ficheiro))) {
                     StringBuilder conteudoDoFicheiro = new StringBuilder();
                     String linha;
 
+                    //le o ficheiro linha a linha
                     while ((linha = br.readLine()) != null) {
                         conteudoDoFicheiro.append(linha).append("\n");
                     }
 
+                    //adiciona o conteudo à lista
                     conteudoFicheiros.add(conteudoDoFicheiro.toString());
 
                 } catch (IOException e) {
@@ -55,10 +66,11 @@ public class Main {
     public static String enviarPedido(ArrayList<String> partes, String model) throws Exception {
         String apiKey = "";
 
-        // Construir o array de mensagens
+        // construir o array de mensagens
         StringBuilder messages = new StringBuilder();
         messages.append("{\"role\":\"system\",\"content\":\"You are a helpful assistant.\"}");
 
+        // adiciona cada parte como uma mensagem do utilizador
         if (partes != null) {
             int i = 0;
             while (i < partes.size()) {
@@ -71,15 +83,17 @@ public class Main {
             }
         }
 
-        // JSON do pedido
+        // body dop json
         String requestBody = "{"
                 + "\"model\":\"" + model + "\","
                 + "\"messages\":[" + messages + "],"
                 + "\"temperature\":0.7"
                 + "}";
 
+        //criar o cliente
         HttpClient client = HttpClient.newHttpClient();
 
+        //pedido
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.openai.com/v1/chat/completions"))
                 .header("Content-Type", "application/json")
@@ -87,62 +101,52 @@ public class Main {
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
 
+        //envia o pedido e recebe a resposta
         HttpResponse<String> response =
                 client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        // mostra o status na consola e devolve o corpo
-        System.out.println("HTTP Status: " + response.statusCode());
 
         return response.body();
     }
 
-    // modelos
     static String[] obterModelos() {
         return new String[]{"gpt-4o-mini", "gpt-4o", "gpt-4.1-mini"};
     }
 
-    static void processarPedido(String folder, String modelo, int nrVersoes, JTextArea infoOut) {
+
+    static void processarPedido(String folder, String modelo, int nrVersoes) {
         File pasta = new File(folder);
         if (!pasta.exists() || !pasta.isDirectory()) {
-            JOptionPane.showMessageDialog(null,
-                    "A pasta indicada não existe ou não é um diretório:\n" + pasta.getAbsolutePath(),
-                    "Pasta inválida",
-                    JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Pasta inválida: " + pasta.getAbsolutePath(),
+                    "Erro", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         ArrayList<String> exemplos = leExemplos(pasta);
-
         if (exemplos.isEmpty()) {
-            JOptionPane.showMessageDialog(null,
-                    "A pasta não contém ficheiros .txt para enviar.",
-                    "Sem exemplos",
-                    JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "A pasta não contém ficheiros .txt.",
+                    "Sem exemplos", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        infoOut.append("Ficheiros lidos: " + exemplos.size() + "\n");
-        infoOut.append("Modelo: " + modelo + " | Versões: " + nrVersoes + "\n");
+        infoTextArea.append("Ficheiros lidos: " + exemplos.size() + "\n");
 
         for (int versao = 1; versao <= nrVersoes; versao++) {
-            infoOut.append("A enviar versão " + versao + "...\n");
+            infoTextArea.append("Versão " + versao + "...\n");
             try {
                 String jsonResposta = enviarPedido(exemplos, modelo);
                 System.out.println(jsonResposta);
             } catch (Exception erro) {
-                erro.printStackTrace();
-                JOptionPane.showMessageDialog(null,
-                        "Erro na versão " + versao + ":\n" + erro.getMessage(),
-                        "Erro",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Erro: " + erro.getMessage(),
+                        "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
 
-        infoOut.append("Concluído.\n");
+        infoTextArea.append("Concluído.\n");
     }
 
-    // Grid layout
+
+    // grid layout
     public static void mostrarGUI() {
         JFrame window = new JFrame("TFC do Rodrigo");
         try {
@@ -151,55 +155,58 @@ public class Main {
 
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        //painel em estilo windows
         JPanel painel = new JPanel(new GridBagLayout());
         painel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(6, 6, 6, 6);
         gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // pasta + o botão para selecionar as pastas do windows
+        // pasta a selecionar
         gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0.0; gbc.fill = GridBagConstraints.NONE;
         painel.add(new JLabel("Pasta:"), gbc);
 
-        JTextField pastaField = new JTextField();
+        pastaField = new JTextField();
         pastaField.setEditable(false);
         gbc.gridx = 1; gbc.weightx = 1.0; gbc.fill = GridBagConstraints.HORIZONTAL;
         painel.add(pastaField, gbc);
 
         JButton selecionarPastaButton = new JButton("Selecionar Pasta");
-        selecionarPastaButton.addActionListener(e -> {
-            JFileChooser seletor = new JFileChooser();
-            seletor.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int resultado = seletor.showOpenDialog(window);
-            if (resultado == JFileChooser.APPROVE_OPTION) {
-                File pasta = seletor.getSelectedFile();
-                pastaField.setText(pasta.getAbsolutePath());
-                infoTextArea.append("Pasta selecionada: " + pasta.getAbsolutePath() + "\n");
+        selecionarPastaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser seletor = new JFileChooser();
+                seletor.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                int resultado = seletor.showOpenDialog(window);
+                if (resultado == JFileChooser.APPROVE_OPTION) {
+                    File pasta = seletor.getSelectedFile();
+                    pastaField.setText(pasta.getAbsolutePath());
+                    infoTextArea.append("Pasta selecionada: " + pasta.getAbsolutePath() + "\n");
+                }
             }
         });
         gbc.gridx = 2; gbc.weightx = 0.0; gbc.fill = GridBagConstraints.NONE;
         painel.add(selecionarPastaButton, gbc);
 
-        // model do llm
-        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 0.0;
+        // modelo llm
+        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 0.0; gbc.fill = GridBagConstraints.NONE;
         painel.add(new JLabel("Modelo:"), gbc);
 
-        JComboBox<String> modeloComboBox = new JComboBox<>(obterModelos());
+        modeloComboBox = new JComboBox<>(obterModelos());
         gbc.gridx = 1; gbc.gridwidth = 2; gbc.weightx = 1.0; gbc.fill = GridBagConstraints.HORIZONTAL;
         painel.add(modeloComboBox, gbc);
         gbc.gridwidth = 1;
 
-        // versões editavel
-        gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0.0;
+        // nr versões
+        gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0.0; gbc.fill = GridBagConstraints.NONE;
         painel.add(new JLabel("Versões:"), gbc);
 
         Integer[] options = {1,2,3,4,5,6,7,8,9,10};
-        JComboBox<Integer> versoesComboBox = new JComboBox<>(options);
+        versoesComboBox = new JComboBox<>(options);
         versoesComboBox.setEditable(true);
         JTextField editor = (JTextField) versoesComboBox.getEditor().getEditorComponent();
         ((AbstractDocument) editor.getDocument()).setDocumentFilter(new NumericFilter());
-        editor.setText("1");
+        editor.setText("1"); // default
 
         gbc.gridx = 1; gbc.weightx = 0.3; gbc.fill = GridBagConstraints.HORIZONTAL;
         painel.add(versoesComboBox, gbc);
@@ -207,7 +214,7 @@ public class Main {
         gbc.gridx = 2; gbc.weightx = 0.7;
         painel.add(Box.createHorizontalStrut(1), gbc);
 
-        // textarea one aparece as informações
+        // textarea onde aparece as informações
         gbc.gridx = 0; gbc.gridy = 3; gbc.anchor = GridBagConstraints.NORTHWEST;
         painel.add(new JLabel("Informações:"), gbc);
 
@@ -223,9 +230,8 @@ public class Main {
 
         gbc.gridwidth = 1; gbc.weighty = 0.0; gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // botão submeter que fica com eventos
+        // submeter
         JButton enviarButton = new JButton("Submeter");
-
         enviarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -249,8 +255,12 @@ public class Main {
                 if (sel instanceof Integer) {
                     nrVersoes = (Integer) sel;
                 } else {
-                    assert sel != null;
-                    String txt = sel.toString();
+                    if (sel == null) {
+                        JOptionPane.showMessageDialog(window, "Indique o número de versões",
+                                "Valor em falta", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    String txt = sel.toString().trim();
                     if (txt.isEmpty()) {
                         JOptionPane.showMessageDialog(window, "Indique o número de versões",
                                 "Valor em falta", JOptionPane.WARNING_MESSAGE);
@@ -269,13 +279,11 @@ public class Main {
                 infoTextArea.append("Pasta: " + pasta + "\n");
                 infoTextArea.append("Modelo: " + modelo + "\n");
 
-                processarPedido(pasta, modelo, nrVersoes, infoTextArea);
+                processarPedido(pasta, modelo, nrVersoes);
             }
         });
 
-
-
-        gbc.gridx = 2; gbc.gridy = 4; gbc.anchor = GridBagConstraints.SOUTHEAST;
+        gbc.gridx = 2; gbc.gridy = 4; gbc.anchor = GridBagConstraints.SOUTHEAST; gbc.fill = GridBagConstraints.NONE;
         painel.add(enviarButton, gbc);
 
         window.setContentPane(painel);
@@ -285,10 +293,7 @@ public class Main {
         window.setVisible(true);
     }
 
-    // variavel que guarda texto de informação
-    private static JTextArea infoTextArea;
-
-
+    // ===== 6) main =====
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main::mostrarGUI);
     }
